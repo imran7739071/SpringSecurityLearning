@@ -1,1 +1,53 @@
-<p>dashboard works!</p>
+<div class="dashboard-container">
+
+  <div class="welcome-card">
+    <h1>Welcome, {{ username }}!</h1>
+    <p>You are successfully logged in.</p>
+
+    <div class="roles-section">
+      <p class="roles-label">Your roles:</p>
+      <div class="roles-list">
+        <span class="role-pill" *ngFor="let role of roles">
+          {{ role | slice:5 }}
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cards visible to all users -->
+  <div class="cards-grid">
+
+    <div class="card">
+      <div class="card-icon blue">P</div>
+      <div class="card-info">
+        <h3>Products</h3>
+        <p>Browse all products</p>
+      </div>
+      <a routerLink="/products" class="card-link">View →</a>
+    </div>
+
+    <!-- Only MANAGER and above -->
+    <div class="card"
+      *ngIf="authService.hasAnyRole(['ROLE_MANAGER','ROLE_ADMIN','ROLE_SUPER_ADMIN'])">
+      <div class="card-icon green">M</div>
+      <div class="card-info">
+        <h3>Manage Products</h3>
+        <p>Create and update products</p>
+      </div>
+      <a routerLink="/products" class="card-link">Manage →</a>
+    </div>
+
+    <!-- Only ADMIN and SUPER_ADMIN -->
+    <div class="card"
+      *ngIf="authService.hasAnyRole(['ROLE_ADMIN','ROLE_SUPER_ADMIN'])">
+      <div class="card-icon red">A</div>
+      <div class="card-info">
+        <h3>Admin Panel</h3>
+        <p>Manage users and roles</p>
+      </div>
+      <a routerLink="/admin" class="card-link">Open →</a>
+    </div>
+
+  </div>
+
+</div>

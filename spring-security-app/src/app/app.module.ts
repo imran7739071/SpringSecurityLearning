@@ -24,6 +24,8 @@ import { ForbiddenComponent } from './shared/forbidden/forbidden.component';
 
 // Interceptor
 import { AuthInterceptor } from './interceptors/auth.interceptor';
+import { ProductListComponent } from './products/product-list/product-list.component';
+import { ProductFormComponent } from './products/product-form/product-form.component';
 
 @NgModule({
   declarations: [
@@ -35,6 +37,8 @@ import { AuthInterceptor } from './interceptors/auth.interceptor';
     AdminComponent,
     NavbarComponent,
     ForbiddenComponent,
+    ProductListComponent,
+    ProductFormComponent,
   ],
   imports: [
     BrowserModule,
