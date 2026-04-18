@@ -1,1 +1,150 @@
-<p>admin works!</p>
+<div class="page-container">
+
+  <!-- Header -->
+  <div class="page-header">
+    <div>
+      <h1>Admin Panel</h1>
+      <p>Manage users, roles and account status</p>
+    </div>
+    <div class="header-stats" *ngIf="!isLoading">
+      <div class="stat">
+        <span class="stat-value">{{ users.length }}</span>
+        <span class="stat-label">Total Users</span>
+      </div>
+      <div class="stat">
+        <span class="stat-value">
+          {{ activeUserCount }}
+        </span>
+        <span class="stat-label">Active</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Messages -->
+  <div class="success-alert" *ngIf="successMessage">
+    {{ successMessage }}
+  </div>
+  <div class="error-alert" *ngIf="errorMessage">
+    {{ errorMessage }}
+  </div>
+
+  <!-- Loading -->
+  <div class="loading" *ngIf="isLoading">
+    Loading users...
+  </div>
+
+  <!-- Users table -->
+  <div class="table-wrapper" *ngIf="!isLoading && users.length > 0">
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>User</th>
+          <th>Roles</th>
+          <th>Status</th>
+          <th>Login type</th>
+          <th>Joined</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of users; let i = index"
+            [class.row-disabled]="!user.enabled">
+
+          <td>{{ i + 1 }}</td>
+
+          <!-- User info -->
+          <td>
+            <div class="user-info">
+              <div class="user-avatar">
+                {{ user.username.charAt(0).toUpperCase() }}
+              </div>
+              <div>
+                <div class="user-name">{{ user.username }}</div>
+                <div class="user-email">{{ user.email }}</div>
+              </div>
+            </div>
+          </td>
+
+          <!-- Current roles -->
+          <td>
+            <span
+              *ngFor="let role of user.roles"
+              class="role-badge"
+              [ngClass]="getRoleBadgeClass(role)">
+              {{ role | slice:5 }}
+            </span>
+          </td>
+
+          <!-- Status badge -->
+          <td>
+            <span class="status-badge"
+              [class.status-active]="user.enabled"
+              [class.status-inactive]="!user.enabled">
+              {{ user.enabled ? 'Active' : 'Disabled' }}
+            </span>
+          </td>
+
+          <!-- OAuth provider -->
+          <td>
+            <span class="provider-badge"
+              [class.provider-google]="user.oauthProvider === 'google'">
+              {{ user.oauthProvider || 'Password' }}
+            </span>
+          </td>
+
+          <!-- Joined date -->
+          <td class="date-cell">
+            {{ user.createdAt | date:'dd MMM yyyy' }}
+          </td>
+
+          <!-- Actions -->
+          <td class="actions-cell">
+
+            <!-- Role assignment — SUPER_ADMIN only -->
+            <div class="role-assign" *ngIf="isSuperAdmin()">
+              <select
+                [(ngModel)]="selectedRoles[user.id]"
+                class="role-select">
+                <option
+                  *ngFor="let role of availableRoles"
+                  [value]="role">
+                  {{ role | slice:5 }}
+                </option>
+              </select>
+              <button
+                class="btn-assign"
+                (click)="assignRole(user.id)">
+                Assign
+              </button>
+            </div>
+
+            <!-- Toggle status -->
+            <button
+              class="btn-toggle"
+              [class.btn-enable]="!user.enabled"
+              [class.btn-disable]="user.enabled"
+              (click)="toggleStatus(user)">
+              {{ user.enabled ? 'Disable' : 'Enable' }}
+            </button>
+
+            <!-- Delete — SUPER_ADMIN only -->
+            <button
+              class="btn-delete"
+              *ngIf="isSuperAdmin()"
+              (click)="deleteUser(user)">
+              Delete
+            </button>
+
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Empty -->
+  <div class="empty-state" *ngIf="!isLoading && users.length === 0">
+    <p>No users found.</p>
+  </div>
+
+</div>

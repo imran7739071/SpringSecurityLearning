@@ -11,6 +11,7 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Component
@@ -57,7 +58,10 @@ public class DataInitializer implements ApplicationRunner {
         superAdmin.setEmail("superadmin@app.com");
         superAdmin.setPassword(passwordEncoder.encode("Admin@1234"));
         superAdmin.setEnabled(true);
-        superAdmin.setRoles(Set.of(superAdminRole));
+        //superAdmin.setRoles(Set.of(superAdminRole));
+        Set<AppRole> roles = new HashSet<>();
+        roles.add(superAdminRole);
+        superAdmin.setRoles(roles);
 
         userRepository.save(superAdmin);
         log.info("Superadmin user created successfully.");
