@@ -1,1 +1,50 @@
-<p>navbar works!</p>
+<nav class="navbar" *ngIf="authService.isLoggedIn()">
+
+  <div class="navbar-brand">
+    <a routerLink="/dashboard">MyApp</a>
+  </div>
+
+  <div class="navbar-links">
+
+    <!-- Visible to all logged-in users -->
+    <a routerLink="/dashboard" routerLinkActive="active">
+      Dashboard
+    </a>
+
+    <!-- Visible to ADMIN and SUPER_ADMIN only -->
+    <a routerLink="/admin" routerLinkActive="active"
+       *ngIf="authService.hasAnyRole(['ROLE_ADMIN','ROLE_SUPER_ADMIN'])">
+      Admin Panel
+    </a>
+
+    <!-- Visible to MANAGER and above -->
+    <a routerLink="/products" routerLinkActive="active"
+       *ngIf="authService.hasAnyRole(['ROLE_MANAGER','ROLE_ADMIN','ROLE_SUPER_ADMIN'])">
+      Products
+    </a>
+
+  </div>
+
+  <div class="navbar-right">
+    <!-- Show logged in username -->
+    <span class="username">
+      {{ authService.getUsername() }}
+    </span>
+
+    <!-- Show role badge -->
+    <span class="role-badge"
+      [ngClass]="{
+        'badge-super': authService.hasRole('ROLE_SUPER_ADMIN'),
+        'badge-admin': authService.hasRole('ROLE_ADMIN'),
+        'badge-manager': authService.hasRole('ROLE_MANAGER'),
+        'badge-user': authService.hasRole('ROLE_USER')
+      }">
+      {{ authService.getRoles()[0] | slice:5 }}
+    </span>
+
+    <button (click)="logout()" class="btn-logout">
+      Logout
+    </button>
+  </div>
+
+</nav>

@@ -1,0 +1,83 @@
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2rem;
+  height: 60px;
+  background: #1e1b4b;
+  color: white;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+
+  .navbar-brand a {
+    color: white;
+    text-decoration: none;
+    font-size: 1.2rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+
+  .navbar-links {
+    display: flex;
+    gap: 1.5rem;
+
+    a {
+      color: #c7d2fe;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      padding: 4px 0;
+      border-bottom: 2px solid transparent;
+      transition: all 0.2s;
+
+      &:hover { color: white; }
+
+      &.active {
+        color: white;
+        border-bottom-color: #818cf8;
+      }
+    }
+  }
+
+  .navbar-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    .username {
+      font-size: 13px;
+      color: #c7d2fe;
+    }
+
+    .role-badge {
+      font-size: 11px;
+      padding: 2px 10px;
+      border-radius: 99px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .badge-super  { background: #dc2626; color: white; }
+    .badge-admin  { background: #d97706; color: white; }
+    .badge-manager{ background: #2563eb; color: white; }
+    .badge-user   { background: #16a34a; color: white; }
+
+    .btn-logout {
+      padding: 6px 14px;
+      background: transparent;
+      border: 1px solid #6366f1;
+      color: #c7d2fe;
+      border-radius: 6px;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.2s;
+
+      &:hover {
+        background: #6366f1;
+        color: white;
+      }
+    }
+  }
+}

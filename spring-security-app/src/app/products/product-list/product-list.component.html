@@ -1,0 +1,119 @@
+<div class="page-container">
+
+  <!-- Header row -->
+  <div class="page-header">
+    <h1>Products</h1>
+    <button
+      class="btn-primary"
+      *ngIf="canEdit()"
+      (click)="goToCreate()">
+      + Add Product
+    </button>
+  </div>
+
+  <!-- Success / Error messages -->
+  <div class="success-alert" *ngIf="successMessage">
+    {{ successMessage }}
+  </div>
+  <div class="error-alert" *ngIf="errorMessage">
+    {{ errorMessage }}
+  </div>
+
+  <!-- Filters row -->
+  <div class="filters-row">
+
+    <input
+      type="text"
+      placeholder="Search by name..."
+      [(ngModel)]="searchKeyword"
+      (keyup)="onSearch()"
+      class="search-input"
+    />
+
+    <select
+      [(ngModel)]="selectedCategory"
+      (change)="onCategoryChange()"
+      class="category-select">
+      <option value="">All Categories</option>
+      <option *ngFor="let cat of categories" [value]="cat">
+        {{ cat }}
+      </option>
+    </select>
+
+    <button
+      class="btn-clear"
+      *ngIf="searchKeyword || selectedCategory"
+      (click)="clearFilters()">
+      Clear
+    </button>
+
+  </div>
+
+  <!-- Loading -->
+  <div class="loading" *ngIf="isLoading">
+    Loading products...
+  </div>
+
+  <!-- Empty state -->
+  <div class="empty-state"
+    *ngIf="!isLoading && filteredProducts.length === 0">
+    <p>No products found.</p>
+    <button
+      class="btn-primary"
+      *ngIf="canEdit()"
+      (click)="goToCreate()">
+      Create your first product
+    </button>
+  </div>
+
+  <!-- Products table -->
+  <div class="table-wrapper" *ngIf="!isLoading && filteredProducts.length > 0">
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Name</th>
+          <th>Category</th>
+          <th>Price</th>
+          <th>Quantity</th>
+          <th>Created By</th>
+          <th *ngIf="canEdit() || canDelete()">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let product of filteredProducts; let i = index">
+          <td>{{ i + 1 }}</td>
+          <td>
+            <div class="product-name">{{ product.name }}</div>
+            <div class="product-desc">{{ product.description }}</div>
+          </td>
+          <td>
+            <span class="category-badge">{{ product.category }}</span>
+          </td>
+          <td class="price">${{ product.price | number:'1.2-2' }}</td>
+          <td>
+            <span [class]="product.quantity <= 5 ? 'qty-low' : 'qty-ok'">
+              {{ product.quantity }}
+            </span>
+          </td>
+          <td class="created-by">{{ product.createdBy }}</td>
+          <td class="actions" *ngIf="canEdit() || canDelete()">
+            <button
+              class="btn-edit"
+              *ngIf="canEdit()"
+              (click)="goToEdit(product.id)">
+              Edit
+            </button>
+            <button
+              class="btn-delete"
+              *ngIf="canDelete()"
+              (click)="delete(product.id, product.name)">
+              Delete
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>

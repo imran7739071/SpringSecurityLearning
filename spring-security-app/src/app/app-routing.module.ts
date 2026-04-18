@@ -8,6 +8,8 @@ import { AuthGuard } from './guards/auth.guard';
 import { ForbiddenComponent } from './shared/forbidden/forbidden.component';
 import { AdminComponent } from './admin/admin/admin.component';
 import { RoleGuard } from './guards/role.guard';
+import { ProductListComponent } from './products/product-list/product-list.component';
+import { ProductFormComponent } from './products/product-form/product-form.component';
 
 const routes: Routes = [
 
@@ -31,6 +33,20 @@ const routes: Routes = [
     canActivate: [AuthGuard, RoleGuard],
     data: { roles: ['ROLE_ADMIN', 'ROLE_SUPER_ADMIN'] }
   },
+
+  { path: 'products',
+  component: ProductListComponent,
+  canActivate: [AuthGuard] },
+
+  { path: 'products/create',
+    component: ProductFormComponent,
+    canActivate: [AuthGuard, RoleGuard],
+    data: { roles: ['ROLE_MANAGER','ROLE_ADMIN','ROLE_SUPER_ADMIN'] } },
+
+  { path: 'products/edit/:id',
+    component: ProductFormComponent,
+    canActivate: [AuthGuard, RoleGuard],
+    data: { roles: ['ROLE_MANAGER','ROLE_ADMIN','ROLE_SUPER_ADMIN'] } },
 
   // Default redirect
   { path: '',   redirectTo: '/login', pathMatch: 'full' },
